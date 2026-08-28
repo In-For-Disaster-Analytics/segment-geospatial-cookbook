@@ -149,9 +149,9 @@ function create_jupyter_configuration {
 		c.${JUPYTER_SERVER_APP}.open_browser = False
 		c.${JUPYTER_SERVER_APP}.allow_origin = u"*"
 		c.${JUPYTER_SERVER_APP}.ssl_options = {"ssl_version": ssl.PROTOCOL_TLSv1_2}
-		c.${JUPYTER_SERVER_APP}.root_dir = "${_tapisJobWorkingDir}"
-		c.${JUPYTER_SERVER_APP}.preferred_dir = "${_tapisJobWorkingDir}"
-		c.${JUPYTER_SERVER_APP}.notebook_dir = "${_tapisJobWorkingDir}/work"
+		c.${JUPYTER_SERVER_APP}.root_dir = "${COOKBOOK_WORKSPACE_DIR}"
+		c.${JUPYTER_SERVER_APP}.preferred_dir = "${COOKBOOK_WORKSPACE_DIR}"
+		c.${JUPYTER_SERVER_APP}.notebook_dir = "${COOKBOOK_WORKSPACE_DIR}"
 		c.FileContentsManager.delete_to_trash = False
 		c.IdentityProvider.token = "${TAP_TOKEN}"
 		c.MultiKernelManager.default_kernel_name = "${COOKBOOK_CONDA_ENV}"
