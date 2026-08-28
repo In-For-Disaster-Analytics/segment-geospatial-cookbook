@@ -10,6 +10,11 @@ dependencies:
       # built for baseline x86-64 (no AVX2 / x86-64-v2 requirement), so they
       # import cleanly on Lonestar6 compute nodes where the container does not
       # expose AVX2 to conda-forge builds (conda-forge NumPy hard-fails there).
+      #
+      # NumPy MUST stay <2.4: NumPy >=2.4.0 PyPI wheels require x86-64-v2
+      # (AVX2) and raise "built with baseline optimizations (X86_V2) ..." on
+      # nodes that don't expose AVX2. Pin an explicit baseline build.
+      - "numpy==1.26.4"
       - jupyterlab
       - ipykernel
       - ipywidgets
