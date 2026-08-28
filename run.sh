@@ -9,7 +9,7 @@ set -xe
 export GIT_REPO_URL="https://github.com/In-For-Disaster-Analytics/segment-geospatial-cookbook.git"
 export COOKBOOK_NAME="segment-geospatial-cookbook"
 export COOKBOOK_CONDA_ENV="segment-geospatial"
-IS_GPU_JOB=true
+IS_GPU_JOB=${IS_GPU_JOB:-true}
 
 
 # Cookbook Variables
@@ -237,11 +237,15 @@ function conda_environment_exists() {
 }
 
 function create_conda_environment() {
-	if [ -f $COOKBOOK_WORKSPACE_DIR/.binder/environment.yml ]; then
-		conda env create -n ${COOKBOOK_CONDA_ENV} -f $COOKBOOK_WORKSPACE_DIR/.binder/environment.yml --yes
-		conda activate ${COOKBOOK_CONDA_ENV}
-	elif  [ -f $COOKBOOK_WORKSPACE_DIR/.binder/environment.yaml ]; then
-		conda env create -n ${COOKBOOK_CONDA_ENV} -f $COOKBOOK_WORKSPACE_DIR/.binder/environment.yaml --yes
+	# Select the environment file matching the job type (GPU needs CUDA torch,
+	# CPU uses a CPU-only torch build since the image has no CUDA libs).
+	if [ "${IS_GPU_JOB}" = "true" ]; then
+		ENV_FILE=$COOKBOOK_WORKSPACE_DIR/.binder/environment.yaml
+	else
+		ENV_FILE=$COOKBOOK_WORKSPACE_DIR/.binder/environment-cpu.yaml
+	fi
+	if [ -f $ENV_FILE ]; then
+		conda env create -n ${COOKBOOK_CONDA_ENV} -f $ENV_FILE --yes
 		conda activate ${COOKBOOK_CONDA_ENV}
 	fi
 	if [ -f $COOKBOOK_WORKSPACE_DIR/.binder/requirements.txt ]; then

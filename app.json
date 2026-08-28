@@ -1,6 +1,6 @@
 {
   "id": "jupyter-lab-samgeo-ls6",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Interactive Jupyter Lab with segment-geospatial (SAM 3) on TACC Lonestar6 GPU.",
   "owner": "${apiUserId}",
   "enabled": true,

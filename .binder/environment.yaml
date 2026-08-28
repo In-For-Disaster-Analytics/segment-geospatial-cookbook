@@ -5,24 +5,27 @@ dependencies:
   - python=3.12
   - pip
   - git
+  # GDAL (provides the osgeo Python bindings samgeo imports). conda-forge
+  # build is fine on Lonestar6 (the compute nodes expose AVX2).
+  - gdal
   - pip:
-      # Interactive Jupyter + SAM 3 stack, installed from PyPI. PyPI wheels are
-      # built for baseline x86-64 (no AVX2 / x86-64-v2 requirement), so they
-      # import cleanly on Lonestar6 compute nodes where the container does not
-      # expose AVX2 to conda-forge builds (conda-forge NumPy hard-fails there).
-      #
-      # NumPy MUST stay <2.4: NumPy >=2.4.0 PyPI wheels require x86-64-v2
-      # (AVX2) and raise "built with baseline optimizations (X86_V2) ..." on
-      # nodes that don't expose AVX2. Pin an explicit baseline build.
-      - "numpy==1.26.4"
+      # samgeo3 requires transformers>=5.0.0rc0 (a pre-release)
+      - "--pre"
+      # Pull torch from the CUDA 12.0 index: LS6's NVIDIA driver is CUDA 12.0,
+      # so the default PyPI torch (cu130) fails with "driver too old". cu120 runs
+      # on a 12.0 driver and matches the ghcr.io/.../segment-geospatial-cookbook-gpu
+      # image (built FROM nvidia/cuda:12.0).
+      - "--extra-index-url https://download.pytorch.org/whl/cu120"
+      # NumPy must stay <2.4: NumPy >=2.4 PyPI wheels require x86-64-v2 (AVX2)
+      # and hard-fail on import. 2.3.x is the last baseline build.
+      - "numpy<2.4"
+      - "torch==2.7.0+cu120"
+      - "torchvision==0.22.0+cu120"
       - jupyterlab
       - ipykernel
       - ipywidgets
       - leafmap
       - localtileserver
       - jupyter-server-proxy
-      # segment-geospatial with SAM 3 support (Meta SAM3 backend).
-      # sam3 requires Python >=3.12 and PyTorch >=2.7. The CUDA GPU is provided
-      # by the ghcr.io/in-for-disaster-analytics/segment-geospatial-cookbook-gpu
-      # image at runtime on Lonestar6 (ls6).
-      - "segment-geospatial[sam3]"
+      # SAM 3 stack. NOTE: the extra is 'samgeo3' (there is no 'sam3' extra).
+      - "segment-geospatial[samgeo3]"

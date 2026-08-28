@@ -1,0 +1,23 @@
+name: segment-geospatial
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - git
+  - gdal
+  - pip:
+      # samgeo3 requires transformers>=5.0.0rc0 (a pre-release)
+      - "--pre"
+      # CPU-only torch for the non-GPU cookbook variant (no CUDA libs in image)
+      - "--extra-index-url https://download.pytorch.org/whl/cpu"
+      - "numpy<2.4"
+      - "torch==2.7.0+cpu"
+      - "torchvision==0.22.0+cpu"
+      - jupyterlab
+      - ipykernel
+      - ipywidgets
+      - leafmap
+      - localtileserver
+      - jupyter-server-proxy
+      - "segment-geospatial[samgeo3]"
