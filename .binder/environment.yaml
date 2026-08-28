@@ -1,0 +1,19 @@
+name: segment-geospatial
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - ipywidgets
+  - ipykernel
+  - jupyterlab
+  - leafmap
+  - localtileserver
+  - pip
+  - git
+  - pip:
+      # segment-geospatial with SAM 3 support (Meta SAM3 backend).
+      # sam3 requires Python >=3.12 and PyTorch >=2.7. The CUDA GPU is provided
+      # by the ghcr.io/in-for-disaster-analytics/cookbook-conda-template-gpu
+      # image at runtime on Lonestar6 (ls6).
+      - "segment-geospatial[sam3]"
+      - jupyter-server-proxy
