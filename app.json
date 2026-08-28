@@ -1,5 +1,5 @@
 {
-  "id": "segment-geospatial-jupyter-gpu",
+  "id": "jupyter-lab-samgeo-ls6",
   "version": "0.0.1",
   "description": "Interactive Jupyter Lab with segment-geospatial (SAM 3) on TACC Lonestar6 GPU.",
   "owner": "${apiUserId}",
@@ -7,7 +7,7 @@
   "runtime": "SINGULARITY",
   "runtimeVersion": null,
   "runtimeOptions": ["SINGULARITY_RUN"],
-  "containerImage": "docker://ghcr.io/in-for-disaster-analytics/cookbook-conda-template-gpu:main",
+  "containerImage": "docker://ghcr.io/in-for-disaster-analytics/segment-geospatial-cookbook-gpu:main",
   "jobType": "BATCH",
   "maxJobs": -1,
   "maxJobsPerUser": -1,
