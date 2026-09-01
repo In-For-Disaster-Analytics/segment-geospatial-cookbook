@@ -28,6 +28,7 @@ dependencies:
       - localtileserver
       - jupyter-server-proxy
       # SAM 3 stack. NOTE: the extra is 'samgeo3' (there is no 'sam3' extra).
-      - "segment-geospatial[samgeo3,fast]"
+      # Install everything so all example notebooks work out of the box.
+      - "segment-geospatial[all]"
       # Explicit deps that pip may fail to resolve under --pre + extra-index-url
       - xarray
