@@ -28,6 +28,6 @@ dependencies:
       - localtileserver
       - jupyter-server-proxy
       # SAM 3 stack. NOTE: the extra is 'samgeo3' (there is no 'sam3' extra).
-      - "segment-geospatial[samgeo3]"
+      - "segment-geospatial[samgeo3,fast]"
       # Explicit deps that pip may fail to resolve under --pre + extra-index-url
       - xarray
