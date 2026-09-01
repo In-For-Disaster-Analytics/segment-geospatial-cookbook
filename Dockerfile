@@ -31,7 +31,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrender1 \
     libgl1-mesa-glx \
     libglib2.0-0 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Pre-download BPE tokenizer so samgeo doesn't need to fetch it at runtime.
+# run.sh copies this into the conda env's samgeo/assets/ directory.
+RUN wget -q -O /opt/bpe_simple_vocab_16e6.txt.gz \
+    "https://github.com/facebookresearch/sam3/raw/refs/heads/main/sam3/assets/bpe_simple_vocab_16e6.txt.gz" && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 

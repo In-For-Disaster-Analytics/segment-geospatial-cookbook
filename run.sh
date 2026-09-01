@@ -256,27 +256,13 @@ function create_conda_environment() {
 	pip install --no-cache-dir --pre "transformers>=5.0.0rc0"
 
 	# --- BPE tokenizer fix ---------------------------------------------------
-	# samgeo/samgeo3.py hardcodes a wrong GitHub URL for the BPE vocab file
-	# (points to /assets/ instead of /sam3/assets/). Download the correct file
-	# to $SCRATCH and patch samgeo3.py to use the local copy.
-	BPE_FILE="${HOME}/bpe_simple_vocab_16e6.txt.gz"
-	BPE_URL="https://github.com/facebookresearch/sam3/raw/refs/heads/main/sam3/assets/bpe_simple_vocab_16e6.txt.gz"
-	if [ ! -f "${BPE_FILE}" ]; then
-		echo "Downloading BPE tokenizer to ${BPE_FILE} ..."
-		wget -q -O "${BPE_FILE}" "${BPE_URL}"
-	fi
-	# Patch samgeo3.py in the installed env so all notebooks work without changes.
-	SAMGEO3_PY=$(python -c "import samgeo.samgeo3 as s; print(s.__file__)" 2>/dev/null || true)
-	if [ -n "${SAMGEO3_PY}" ]; then
-		# Replace the broken URL with the local path
-		sed -i "s|bpe_simple_vocab_16e6.txt.gz|${BPE_FILE}|g" "${SAMGEO3_PY}"
-		sed -i "s|url = .*bpe_simple_vocab.*|url = \"file://${BPE_FILE}\"|g" "${SAMGEO3_PY}"
-		echo "Patched ${SAMGEO3_PY} to use local BPE tokenizer."
-	fi
-	# Also patch sam3's model_builder.py if present (it may download independently)
-	SAM3_MB=$(python -c "import sam3.model_builder as m; print(m.__file__)" 2>/dev/null || true)
-	if [ -n "${SAM3_MB}" ]; then
-		sed -i "s|bpe_simple_vocab_16e6.txt.gz|${BPE_FILE}|g" "${SAM3_MB}"
+	# The Docker image pre-downloads the BPE file to /opt/. Copy it into the
+	# conda env's samgeo/assets/ directory so samgeo finds it natively.
+	SAMGEO_ASSETS=$(python -c "import samgeo; import os; print(os.path.join(os.path.dirname(samgeo.__file__), 'assets'))" 2>/dev/null || true)
+	if [ -n "${SAMGEO_ASSETS}" ] && [ -f /opt/bpe_simple_vocab_16e6.txt.gz ]; then
+		mkdir -p "${SAMGEO_ASSETS}"
+		cp /opt/bpe_simple_vocab_16e6.txt.gz "${SAMGEO_ASSETS}/"
+		echo "Installed BPE tokenizer to ${SAMGEO_ASSETS}/"
 	fi
 	# --- End BPE tokenizer fix -----------------------------------------------
 
