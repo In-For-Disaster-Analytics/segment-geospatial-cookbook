@@ -25,6 +25,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     ssh \
     rsync \
+    # OpenCV (cv2) runtime dependencies
+    libxcb1 \
+    libxext6 \
+    libxrender1 \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
     && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
