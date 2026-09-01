@@ -9,8 +9,10 @@ dependencies:
   # build is fine on Lonestar6 (the compute nodes expose AVX2).
   - gdal
   - pip:
-      # samgeo3 requires transformers>=5.0.0rc0 (a pre-release)
-      - "--pre"
+      # NOTE: --pre is deliberately omitted here. It causes pip to resolve
+      # pre-release thinc/spacy/numpy that break binary compatibility.
+      # transformers>=5.0.0rc0 (a pre-release needed by samgeo3) is installed
+      # separately in run.sh with --pre scoped to just that one package.
       # Pull torch from the CUDA 12.1 index: LS6's NVIDIA driver is CUDA 12.0
       # (reported as 12080). There is no cu120 index on pytorch.org — cu121 is
       # the lowest available. CUDA 12.1 wheels are backward-compatible with

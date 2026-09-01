@@ -251,6 +251,9 @@ function create_conda_environment() {
 	if [ -f $COOKBOOK_WORKSPACE_DIR/.binder/requirements.txt ]; then
 		pip install --no-cache-dir -r $COOKBOOK_WORKSPACE_DIR/.binder/requirements.txt
 	fi
+	# Install pre-release transformers (samgeo3 needs >=5.0.0rc0) with --pre
+	# scoped to ONLY this package, avoiding global --pre that breaks thinc/numpy.
+	pip install --no-cache-dir --pre "transformers>=5.0.0rc0"
 	python -m ipykernel install --user --name "${COOKBOOK_CONDA_ENV}" --display-name "Python (${COOKBOOK_CONDA_ENV})"
 }
 
