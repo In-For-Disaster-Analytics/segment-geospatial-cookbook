@@ -11,16 +11,16 @@ dependencies:
   - pip:
       # samgeo3 requires transformers>=5.0.0rc0 (a pre-release)
       - "--pre"
-      # Pull torch from the CUDA 12.0 index: LS6's NVIDIA driver is CUDA 12.0,
-      # so the default PyPI torch (cu130) fails with "driver too old". cu120 runs
-      # on a 12.0 driver and matches the ghcr.io/.../segment-geospatial-cookbook-gpu
-      # image (built FROM nvidia/cuda:12.0).
-      - "--extra-index-url https://download.pytorch.org/whl/cu120"
+      # Pull torch from the CUDA 12.1 index: LS6's NVIDIA driver is CUDA 12.0
+      # (reported as 12080). There is no cu120 index on pytorch.org — cu121 is
+      # the lowest available. CUDA 12.1 wheels are backward-compatible with
+      # CUDA 12.0 drivers per NVIDIA docs. cu121 goes up to torch 2.5.1.
+      - "--extra-index-url https://download.pytorch.org/whl/cu121"
       # NumPy must stay <2.4: NumPy >=2.4 PyPI wheels require x86-64-v2 (AVX2)
       # and hard-fail on import. 2.3.x is the last baseline build.
       - "numpy<2.4"
-      - "torch==2.7.0+cu120"
-      - "torchvision==0.22.0+cu120"
+      - "torch==2.5.1+cu121"
+      - "torchvision==0.20.1+cu121"
       - jupyterlab
       - ipykernel
       - ipywidgets
