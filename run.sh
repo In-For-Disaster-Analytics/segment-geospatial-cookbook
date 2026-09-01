@@ -259,7 +259,7 @@ function create_conda_environment() {
 	# samgeo/samgeo3.py hardcodes a wrong GitHub URL for the BPE vocab file
 	# (points to /assets/ instead of /sam3/assets/). Download the correct file
 	# to $SCRATCH and patch samgeo3.py to use the local copy.
-	BPE_FILE="${SCRATCH}/bpe_simple_vocab_16e6.txt.gz"
+	BPE_FILE="${HOME}/bpe_simple_vocab_16e6.txt.gz"
 	BPE_URL="https://github.com/facebookresearch/sam3/raw/refs/heads/main/sam3/assets/bpe_simple_vocab_16e6.txt.gz"
 	if [ ! -f "${BPE_FILE}" ]; then
 		echo "Downloading BPE tokenizer to ${BPE_FILE} ..."
