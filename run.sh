@@ -52,7 +52,13 @@ function install_conda() {
 
 function load_cuda() {
 	echo "Loading CUDA..."
-	module load cuda/12.0
+	# Stampede3 has cuda/12.4, cuda/12.8, cuda/13.1; LS6 has cuda/12.0.
+	# torch cu126 wheels need CUDA toolkit >=12.6; use 12.8 on Stampede3, 12.0 on LS6.
+	if [[ "$(hostname)" == *"stampede"* ]]; then
+		module load cuda/12.8
+	else
+		module load cuda/12.0
+	fi
 }
 
 function export_repo_variables() {
