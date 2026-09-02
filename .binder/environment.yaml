@@ -5,9 +5,6 @@ dependencies:
   - python=3.12
   - pip
   - git
-  # GDAL (provides the osgeo Python bindings samgeo imports). conda-forge
-  # build is fine on Lonestar6 (the compute nodes expose AVX2).
-  - gdal
   - pip:
       # NOTE: --pre is deliberately omitted here. It causes pip to resolve
       # pre-release thinc/spacy/numpy that break binary compatibility.
@@ -23,6 +20,9 @@ dependencies:
       - "--extra-index-url https://download.pytorch.org/whl/cu126"
       # NumPy must stay <2.4: NumPy >=2.4 PyPI wheels require x86-64-v2 (AVX2)
       # and hard-fail on import. 2.3.x is the last baseline build.
+      # GDAL Python bindings (samgeo imports osgeo.gdal). Install via pip to
+      # link against the libgdal-dev system library in the Docker image.
+      - GDAL
       - "numpy<2.4"
       - "torch==2.7.1+cu126"
       - "torchvision==0.22.1+cu126"

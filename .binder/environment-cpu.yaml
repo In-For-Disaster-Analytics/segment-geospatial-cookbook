@@ -5,11 +5,11 @@ dependencies:
   - python=3.12
   - pip
   - git
-  - gdal
   - pip:
       # NOTE: --pre is deliberately omitted here (see environment.yaml comments).
       # transformers>=5.0.0rc0 is installed separately in run.sh with --pre scoped.
       - "--extra-index-url https://download.pytorch.org/whl/cpu"
+      - GDAL
       - "numpy<2.4"
       - "torch==2.7.1+cpu"
       - "torchvision==0.22.1+cpu"
