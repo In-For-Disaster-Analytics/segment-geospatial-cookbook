@@ -259,7 +259,9 @@ function create_conda_environment() {
 	fi
 	# Install pre-release transformers (samgeo3 needs >=5.0.0rc0) with --pre
 	# scoped to ONLY this package, avoiding global --pre that breaks thinc/numpy.
-	pip install --no-cache-dir --pre "transformers>=5.0.0rc0"
+	# PINNED: transformers 5.16.1 removed get_head_mask (breaks samgeo/sam3).
+	# 5.0.0rc0 works but is old; 4.49.0 is stable and compatible.
+	pip install --no-cache-dir --pre "transformers==5.0.0rc0"
 
 	# --- BPE tokenizer fix ---------------------------------------------------
 	# The Docker image pre-downloads the BPE file to /opt/. Copy it into the
