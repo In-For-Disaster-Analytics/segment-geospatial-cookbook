@@ -6,8 +6,8 @@ dependencies:
   - pip
   - git
   - gdal=3.10
-  - libtiff=4.6
-  - libjpeg-turbo=3.0
+  - libtiff=4.7
+  - libjpeg-turbo=3.2
   - pip:
       # NOTE: --pre is deliberately omitted here (see environment.yaml comments).
       # transformers>=5.0.0rc0 is installed separately in run.sh with --pre scoped.
