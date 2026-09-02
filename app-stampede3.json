@@ -143,7 +143,7 @@
     "fileInputArrays": [],
     "nodeCount": 1,
     "coresPerNode": 96,
-    "memoryMB": 1048576,
+    "memoryMB": 1000000,
     "maxMinutes": 120,
     "subscriptions": [],
     "tags": []
