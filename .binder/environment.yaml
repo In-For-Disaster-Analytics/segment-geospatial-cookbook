@@ -5,6 +5,7 @@ dependencies:
   - python=3.12
   - pip
   - git
+  - gdal
   - pip:
       # NOTE: --pre is deliberately omitted here. It causes pip to resolve
       # pre-release thinc/spacy/numpy that break binary compatibility.
@@ -20,11 +21,6 @@ dependencies:
       - "--extra-index-url https://download.pytorch.org/whl/cu126"
       # NumPy must stay <2.4: NumPy >=2.4 PyPI wheels require x86-64-v2 (AVX2)
       # and hard-fail on import. 2.3.x is the last baseline build.
-      # GDAL Python bindings (samgeo imports osgeo.gdal). Install via pip to
-      # link against the libgdal-dev system library in the Docker image.
-      # MUST pin to match the system libgdal version (3.4.1 on LS6); unpinned
-      # tries to build 3.13.x from source which requires libgdal >=3.13.
-      - "GDAL==3.4.1"
       - "numpy<2.4"
       - "torch==2.7.1+cu126"
       - "torchvision==0.22.1+cu126"
