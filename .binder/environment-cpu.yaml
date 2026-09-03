@@ -6,6 +6,7 @@ dependencies:
   - pip
   - git
   - gdal=3.10
+  - pygdal=3.10.*
   - libtiff=4.7
   - libjpeg-turbo=3.2
   - pip:
