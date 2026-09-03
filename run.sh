@@ -197,6 +197,33 @@ function run_jupyter() {
 	echo "=== End GPU Diagnostics ==="
 	# --- End GPU diagnostics ---------------------------------------------------
 
+	# --- GroundingDINO transformers 5.x compat patch --------------------------
+	# transformers 5.x removed BertModel.get_head_mask(). GroundingDINO's
+	# BertModelWarper copies it at init time and crashes. Patch it back.
+	python -c "
+import torch
+from transformers import BertModel
+if not hasattr(BertModel, 'get_head_mask'):
+    def _get_head_mask(self, head_mask, num_hidden_layers, is_attention_chunked=False):
+        if head_mask is not None:
+            if head_mask.dim() == 1:
+                head_mask = head_mask.unsqueeze(0).unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
+                head_mask = head_mask.expand(num_hidden_layers, -1, -1, -1, -1)
+            elif head_mask.dim() == 2:
+                head_mask = head_mask.unsqueeze(1).unsqueeze(-1).unsqueeze(-1)
+            head_mask = head_mask.to(dtype=torch.float)
+            if is_attention_chunked:
+                head_mask = head_mask.unsqueeze(-1)
+        else:
+            head_mask = [None] * num_hidden_layers
+        return head_mask
+    BertModel.get_head_mask = _get_head_mask
+    print('Patched BertModel.get_head_mask for transformers 5.x compat')
+else:
+    print('BertModel.get_head_mask already present — no patch needed')
+" 2>&1 || echo "WARNING: GroundingDINO compat patch failed"
+	# --- End GroundingDINO patch ----------------------------------------------
+
 	NB_SERVERDIR=$HOME/.jupyter
 	JUPYTER_SERVER_APP="ServerApp"
 	JUPYTER_BIN="jupyter-lab"
