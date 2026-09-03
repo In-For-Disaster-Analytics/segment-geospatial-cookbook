@@ -16,14 +16,15 @@ dependencies:
       # Pull torch from the CUDA 12.6 index: LS6's NVIDIA driver is CUDA 12.0
       # (reported as 12080). NVIDIA CUDA 12.x is backward-compatible: 12.6
       # wheels run on 12.0 drivers per NVIDIA docs.
-      # torch>=2.8 is needed: segment-geospatial[samgeo3] 1.4.2 requires
-      # triton>=3.5.1, which is incompatible with torch 2.7.x (triton==3.3.1).
+      # torch>=2.10 is needed: segment-geospatial[samgeo3] 1.4.2 requires
+      # triton>=3.5.1. torch 2.10.0 ships triton==3.6.0 (satisfies >=3.5.1).
+      # torch 2.7.x needs triton==3.3.1, 2.8.x needs triton==3.4.0 — both fail.
       - "--extra-index-url https://download.pytorch.org/whl/cu126"
       # NumPy must stay <2.4: NumPy >=2.4 PyPI wheels require x86-64-v2 (AVX2)
       # and hard-fail on import. 2.3.x is the last baseline build.
       - "numpy<2.4"
-      - "torch==2.8.0+cu126"
-      - "torchvision==0.23.0+cu126"
+      - "torch==2.10.0+cu126"
+      - "torchvision==0.25.0+cu126"
       - jupyterlab
       - ipykernel
       - ipywidgets
