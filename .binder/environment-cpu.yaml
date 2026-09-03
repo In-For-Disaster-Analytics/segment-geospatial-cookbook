@@ -21,5 +21,8 @@ dependencies:
       - leafmap
       - localtileserver
       - jupyter-server-proxy
-      - "segment-geospatial[all]"
+      # SAM 3 stack. Do NOT use segment-geospatial[all]: pip backtracks to
+      # old/incompatible releases (0.15.x) and drops Meta sam3 imports.
+      - "segment-geospatial[samgeo3]==1.4.2"
+      - "sam3>=0.1.4"
       - xarray

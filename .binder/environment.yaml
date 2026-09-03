@@ -32,8 +32,11 @@ dependencies:
       - leafmap
       - localtileserver
       - jupyter-server-proxy
-      # SAM 3 stack. NOTE: the extra is 'samgeo3' (there is no 'sam3' extra).
-      # Install everything so all example notebooks work out of the box.
-      - "segment-geospatial[all]"
+      # SAM 3 stack. Do NOT use segment-geospatial[all]: pip backtracks to
+      # old/incompatible releases (0.15.x) and drops Meta sam3 imports.
+      # Pin the main package to its samgeo3 extra + explicit sam3 dependency
+      # so Meta SAM3 imports are available on first launch.
+      - "segment-geospatial[samgeo3]==1.4.2"
+      - "sam3>=0.1.4"
       # Explicit deps that pip may fail to resolve under --pre + extra-index-url
       - xarray

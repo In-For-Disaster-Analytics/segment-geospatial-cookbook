@@ -260,7 +260,9 @@ function create_conda_environment() {
 	# Install pre-release transformers (samgeo3 needs >=5.0.0rc0) with --pre
 	# scoped to ONLY this package, avoiding global --pre that breaks thinc/numpy.
 	# PINNED: transformers 5.16.1 removed get_head_mask (breaks samgeo/sam3).
-	# 5.0.0rc0 works but is old; 4.49.0 is stable and compatible.
+	# 5.0.0rc0 works and is explicitly needed by samgeo3 Meta SAM3 backend.
+	# NOTE: segment-geospatial[samgeo3]==1.4.2 is pinned in environment.yaml
+	# to avoid pip backtracking to old/incompatible versions (0.15.x).
 	pip install --no-cache-dir --pre "transformers==5.0.0rc0"
 
 	# --- BPE tokenizer fix ---------------------------------------------------
