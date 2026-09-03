@@ -120,6 +120,15 @@
           "notes": {
             "isHidden": true
           }
+        },
+        {
+          "name": "GPU Resources",
+          "description": "Request GPU resources from Slurm. Required for CUDA to be visible inside the container.",
+          "inputMode": "FIXED",
+          "arg": "--gres=gpu:h100:4",
+          "notes": {
+            "isHidden": true
+          }
         }
       ],
       "envVariables": [

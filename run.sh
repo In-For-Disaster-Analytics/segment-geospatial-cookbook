@@ -52,12 +52,22 @@ function install_conda() {
 
 function load_cuda() {
 	echo "Loading CUDA..."
-	# Stampede3 has cuda/12.4, cuda/12.8, cuda/13.1; LS6 has cuda/12.0.
-	# torch cu126 wheels need CUDA toolkit >=12.6; use 12.8 on Stampede3, 12.0 on LS6.
-	if [[ "$(hostname)" == *"stampede"* ]]; then
-		module load cuda/12.8
+	# When running inside an Apptainer container with --nv, the container's own
+	# CUDA runtime (at /usr/local/cuda) is sufficient. Loading the host CUDA
+	# module can conflict with the container's libraries. Only load the host
+	# module when NOT inside a container (detected via APPTAINER_CONTAINER or
+	# the presence of /run/.container.sock which Apptainer creates).
+	if [ -n "${APPTAINER_CONTAINER}" ] || [ -S "/run/.container.sock" ]; then
+		echo "Running inside Apptainer container — skipping host CUDA module load."
+		echo "Container CUDA: $(ls /usr/local/cuda/lib64/libcudart* 2>/dev/null || echo 'not found')"
 	else
-		module load cuda/12.0
+		# Stampede3 has cuda/12.4, cuda/12.8, cuda/13.1; LS6 has cuda/12.0.
+		# torch cu126 wheels need CUDA toolkit >=12.6; use 12.8 on Stampede3, 12.0 on LS6.
+		if [[ "$(hostname)" == *"stampede"* ]]; then
+			module load cuda/12.8
+		else
+			module load cuda/12.0
+		fi
 	fi
 }
 
@@ -167,6 +177,26 @@ function create_jupyter_configuration {
 
 function run_jupyter() {
 	conda activate ${COOKBOOK_CONDA_ENV}
+
+	# --- GPU diagnostics -------------------------------------------------------
+	echo "=== GPU Diagnostics ==="
+	echo "Hostname: $(hostname)"
+	if command -v nvidia-smi &>/dev/null; then
+		echo "nvidia-smi available"
+		nvidia-smi || echo "WARNING: nvidia-smi failed (no GPU allocated?)"
+	else
+		echo "WARNING: nvidia-smi not found in PATH"
+	fi
+	if [ -d /dev/nvidia* ] 2>/dev/null; then
+		echo "NVIDIA device nodes:"
+		ls -la /dev/nvidia* 2>/dev/null || echo "  (none found)"
+	else
+		echo "WARNING: /dev/nvidia* device nodes not present — GPU passthrough may not be configured"
+	fi
+	python -c "import torch; print(f'torch CUDA available: {torch.cuda.is_available()}'); print(f'torch CUDA device count: {torch.cuda.device_count()}'); print(f'torch version: {torch.__version__}')" 2>&1 || echo "WARNING: torch CUDA check failed"
+	echo "=== End GPU Diagnostics ==="
+	# --- End GPU diagnostics ---------------------------------------------------
+
 	NB_SERVERDIR=$HOME/.jupyter
 	JUPYTER_SERVER_APP="ServerApp"
 	JUPYTER_BIN="jupyter-lab"
