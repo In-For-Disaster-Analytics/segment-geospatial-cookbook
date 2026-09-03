@@ -13,8 +13,8 @@ dependencies:
       # transformers>=5.0.0rc0 is installed separately in run.sh with --pre scoped.
       - "--extra-index-url https://download.pytorch.org/whl/cpu"
       - "numpy<2.4"
-      - "torch==2.7.1+cpu"
-      - "torchvision==0.22.1+cpu"
+      - "torch==2.8.0+cpu"
+      - "torchvision==0.23.0+cpu"
       - jupyterlab
       - ipykernel
       - ipywidgets
